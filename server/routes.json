@@ -1,0 +1,11 @@
+{
+  "/categories": "/categories",
+  "/huariques": "/huariques",
+  "/huariques/:id": "/huariques/:id",
+  "/promos": "/promos",
+  "/reviews": "/reviews",
+  "/plans": "/plans",
+  "/subscriptions": "/subscriptions",
+  "/subscriptions/:id": "/subscriptions/:id",
+  "/users": "/users"
+}
