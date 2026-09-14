@@ -26,11 +26,19 @@ const routes = [
     ...reportsRoutes,
 
     {
+        path: '/terms',
+        name: 'terms',
+        component: () => import('./shared/presentations/views/terms.view.vue'),
+        meta: { title: 'Términos y Condiciones' }
+    },
+
+    {
         path: '/profile',
         name: 'profile',
         component: () => import('./shared/presentations/views/profile.view.vue'),
         meta: { requiresAuth: true, title: 'Mi perfil' }
     },
+
 
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound, meta: { title: 'Página no encontrada' } },
 ];
@@ -68,5 +76,6 @@ router.afterEach((to) => {
     const title = to.meta?.title ? `${to.meta.title} · ${base}` : base;
     if (typeof document !== 'undefined') document.title = title;
 });
+
 
 export default router;

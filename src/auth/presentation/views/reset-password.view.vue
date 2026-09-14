@@ -3,9 +3,9 @@
     <div class="reset-card">
       <h2>{{ $t('resetPassword.title') }}</h2>
 
-      <div class="error-message" v-if="tokenError">
+      <div class="error-message" v-if="emailError">
         <h3>⚠️ {{ $t('resetPassword.invalidTitle') }}</h3>
-        <p>{{ tokenError }}</p>
+        <p>{{ emailError }}</p>
         <router-link to="/auth/password-recovery" class="btn-primary">
           {{ $t('resetPassword.requestNewLink') }}
         </router-link>
@@ -77,8 +77,8 @@ export default {
       isLoading: false,
       passwordReset: false,
       error: null,
-      tokenError: null,
-      token: null
+      emailError: null,
+      email: null
     };
   },
   computed: {
@@ -90,11 +90,10 @@ export default {
     }
   },
   mounted() {
-    // Obtener token de la URL
-    this.token = this.$route.query.token;
-    if (!this.token) {
-      // Mensaje localizado
-      this.tokenError = this.$t('resetPassword.tokenMissing');
+    // El backend real no usa token: el paso anterior pasa el email por query.
+    this.email = this.$route.query.email;
+    if (!this.email) {
+      this.emailError = this.$t('resetPassword.emailMissing');
     }
   },
   methods: {
@@ -105,7 +104,7 @@ export default {
       this.error = null;
 
       try {
-        const result = await resetPasswordUseCase(this.token, this.password);
+        const result = await resetPasswordUseCase(this.email, this.password);
         if (result.success) {
           this.passwordReset = true;
         } else {

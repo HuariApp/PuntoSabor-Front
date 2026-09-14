@@ -75,15 +75,13 @@ export default {
       email: '',
       isLoading: false,
       tokenSent: false,
-      error: null,
-      devToken: null // token para demo o retornado por el usecase
+      error: null
     };
   },
   computed: {
-    // Si el usecase no devolvió token, usamos uno de demo para no caer en "enlace inválido"
+    // El backend real no usa token: el siguiente paso solo necesita el email.
     resetLink() {
-      const token = this.devToken || 'demo123';
-      return { path: '/auth/reset-password', query: { token } };
+      return { path: '/auth/reset-password', query: { email: this.email } };
     }
   },
   methods: {
@@ -94,8 +92,6 @@ export default {
         const result = await requestPasswordRecoveryUseCase(this.email);
         if (result.success) {
           this.tokenSent = true;
-          // guarda el token si el backend/mock lo devuelve; si no, deja null (el computed caerá a demo123)
-          this.devToken = result.token || this.devToken;
         } else {
           this.error = result.message;
         }

@@ -26,7 +26,42 @@
           />
         </label>
 
-        <button class="btn" type="submit" :disabled="!emailOk || loading">
+        <label class="field">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="10" width="16" height="10" rx="2" stroke-width="1.8"/>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <input
+              v-model="password"
+              class="input"
+              :type="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              :placeholder="$t('login.passwordPlaceholder')"
+              :aria-label="$t('login.passwordAria')"
+              required
+          />
+          <button
+              type="button"
+              class="field__toggle"
+              @click="showPassword = !showPassword"
+              tabindex="-1"
+              :aria-label="showPassword ? $t('login.hidePassword') : $t('login.showPassword')"
+          >
+            <svg v-if="showPassword" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="12" cy="12" r="3" stroke-width="1.6" fill="none"/>
+            </svg>
+            <svg v-else viewBox="0 0 24 24" width="20" height="20">
+              <path d="M3 3l18 18" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M10.6 5.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a15.6 15.6 0 0 1-3.4 4.3M6.6 6.6C4 8.3 2 12 2 12s3.5 7 10 7c1.2 0 2.3-.2 3.3-.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            </svg>
+          </button>
+        </label>
+
+        <button class="btn" type="submit" :disabled="!canSend || loading">
           <span v-if="!loading">{{ $t('login.submit') }}</span>
           <span v-else>{{ $t('login.submitting') }}</span>
         </button>
@@ -56,21 +91,26 @@ export default {
   name: 'LoginView',
   data: () => ({
     email: '',
+    password: '',
+    showPassword: false,
     loading: false,
     error: ''
   }),
   computed: {
     emailOk(){
       return /\S+@\S+\.\S+/.test(this.email || '');
+    },
+    canSend() {
+      return this.emailOk && (this.password || '').length > 0;
     }
   },
   methods: {
     async onSubmit(){
-      if (!this.emailOk || this.loading) return;
+      if (!this.canSend || this.loading) return;
       this.error = '';
       this.loading = true;
       try{
-        await loginUseCase(this.email);
+        await loginUseCase(this.email, this.password);
         this.$router.push('/role');
       }catch(e){
         this.error = e?.message || this.$t('login.errorDefault');
@@ -82,3 +122,27 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.field {
+  position: relative;
+}
+.field__toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #6b5a4d;
+}
+.field__toggle svg {
+  fill: none;
+  stroke: currentColor;
+}
+</style>

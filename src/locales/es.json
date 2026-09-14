@@ -102,32 +102,26 @@
     "promos": {
       "title": "Promociones",
       "seeDetails": "Ver detalles",
-
       "manageBtn": "Gestionar promos",
       "addBtn": "Nueva promoción",
-
       "labels": {
         "off": "de descuento"
       },
-
       "status": {
         "active": "Activa",
         "upcoming": "Próximamente",
         "expired": "Vencida",
         "complete": "Agotada"
       },
-
       "actions": {
         "close": "Cerrar",
         "create": "Crear promoción",
         "creating": "Creando...",
         "delete": "Eliminar promoción"
       },
-
       "create": {
         "title": "Crear promoción"
       },
-
       "fields": {
         "title": "Título",
         "note": "Descripción corta",
@@ -138,36 +132,49 @@
         "huarique": "Huarique",
         "selectPlaceholder": "Selecciona un huarique…"
       },
-
       "noHuariquesHint": "Primero registra un huarique para poder crear promociones.",
-
       "details": {
         "validity": "Vigencia",
         "available": "Disponibles"
       },
-
       "errors": {
         "titleRequired": "El título es obligatorio",
         "createFailed": "Error al crear promoción"
       },
-
       "confirm": {
         "delete": "¿Seguro que deseas eliminar esta promoción?"
       },
-
       "alerts": {
         "deleted": "Promoción eliminada correctamente",
         "deleteFailed": "No se pudo eliminar la promoción"
       },
       "cards": {
-        "pollo":  { "title": "2x1 en Pollo Hoy",  "note": "Locales seleccionados" },
-        "marino": { "title": "Menú Marino S/20", "note": "Lun–Vie 12:00–16:00" },
-        "cafe":   { "title": "Café + Brownie",   "note": "Solo en Aroma & Sabor" },
-        "parrilla": { "title": "Parrillada Familiar", "note": "15% en fines de semana" },
-        "postre": { "title": "Postres 3x2", "note": "En La Dulcería todo el mes" },
-        "criollo": { "title": "Descuento Criollo", "note": "Platos criollos -10%" }
+        "pollo": {
+          "title": "2x1 en Pollo Hoy",
+          "note": "Locales seleccionados"
+        },
+        "marino": {
+          "title": "Menú Marino S/20",
+          "note": "Lun–Vie 12:00–16:00"
+        },
+        "cafe": {
+          "title": "Café + Brownie",
+          "note": "Solo en Aroma & Sabor"
+        },
+        "parrilla": {
+          "title": "Parrillada Familiar",
+          "note": "15% en fines de semana"
+        },
+        "postre": {
+          "title": "Postres 3x2",
+          "note": "En La Dulcería todo el mes"
+        },
+        "criollo": {
+          "title": "Descuento Criollo",
+          "note": "Platos criollos -10%"
+        }
       }
-  },
+    },
     "labels": {
       "name": "Nombre",
       "category": "Categoría",
@@ -206,7 +213,9 @@
     },
     "saveError": "No se pudo guardar. Inténtalo otra vez.",
     "promosMgmt": {
-      "create": { "title": "Crear Promoción Destacada" },
+      "create": {
+        "title": "Crear Promoción Destacada"
+      },
       "form": {
         "titleLabel": "Título de la Promoción",
         "titlePh": "2x1 Pollo, Descuento 30%, etc.",
@@ -238,8 +247,12 @@
         "usage": "{percent}% usado",
         "claim": "Reclamar Oferta"
       },
-      "errors": { "createFailed": "Error al crear promoción" },
-      "confirm": { "deleteIrreversible": "¿Eliminar esta promoción? Esta acción no tiene reversa en el mock." }
+      "errors": {
+        "createFailed": "Error al crear promoción"
+      },
+      "confirm": {
+        "deleteIrreversible": "¿Eliminar esta promoción? Esta acción no tiene reversa en el mock."
+      }
     }
   },
   "login": {
@@ -252,7 +265,11 @@
     "noAccount": "¿No tienes cuenta?",
     "register": "Regístrate",
     "errorDefault": "No pudimos iniciar sesión. Intenta de nuevo.",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "passwordPlaceholder": "Contraseña",
+    "passwordAria": "Contraseña",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña"
   },
   "register": {
     "title": "¡Hola!",
@@ -265,7 +282,17 @@
     "helloRight": "¡Qué gusto verte!",
     "subRight": "Crea tu cuenta con tu nombre y correo. Tardarás menos de un minuto.",
     "successToast": "¡Cuenta creada! Te llevamos a elegir tu rol…",
-    "errorToast": "No pudimos crear tu cuenta. Intenta nuevamente."
+    "errorToast": "No pudimos crear tu cuenta. Intenta nuevamente.",
+    "passwordPlaceholder": "Contraseña",
+    "passwordAria": "Contraseña",
+    "confirmPasswordPlaceholder": "Confirmar contraseña",
+    "confirmPasswordAria": "Confirmar contraseña",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "termsPrefix": "Acepto los",
+    "termsLink": "términos y condiciones",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña"
   },
   "roleSelect": {
     "title": "Elige tu rol",
@@ -277,7 +304,9 @@
     "ownerDesc": "Publica tu huarique y gestiona tu vitrina.",
     "continue": "Continuar",
     "explorerAria": "Rol explorador",
-    "ownerAria": "Rol dueño de restaurante"
+    "ownerAria": "Rol dueño de restaurante",
+    "saving": "Guardando...",
+    "errorDefault": "No pudimos guardar tu rol. Intenta nuevamente."
   },
   "contact": {
     "title": "Contáctanos",
@@ -293,7 +322,10 @@
     "sent": "¡Mensaje enviado!",
     "mapTitle": "Encuéntranos",
     "mapAria": "Mapa y datos de contacto",
-    "info": { "address": "Av. Sabor 123, Lima", "hours": "Lun–Vie: 9:00–18:00" }
+    "info": {
+      "address": "Av. Sabor 123, Lima",
+      "hours": "Lun–Vie: 9:00–18:00"
+    }
   },
   "map": {
     "title": "Huariques cerca de ti",
@@ -337,8 +369,14 @@
   },
   "reviews": {
     "title": "Reseñas",
-    "cta": { "reviewThisPlace": "Reseñar", "viewReviews": "Ver reseñas" },
-    "new": { "title": "Nueva reseña", "subtitle": "Cuéntanos tu experiencia" },
+    "cta": {
+      "reviewThisPlace": "Reseñar",
+      "viewReviews": "Ver reseñas"
+    },
+    "new": {
+      "title": "Nueva reseña",
+      "subtitle": "Cuéntanos tu experiencia"
+    },
     "form": {
       "rating": "Calificación",
       "comment": "Reseña",
@@ -379,7 +417,8 @@
     "errorDefault": "Error al restablecer contraseña. Inténtalo otra vez.",
     "successTitle": "¡Contraseña Actualizada!",
     "successLead": "Tu contraseña ha sido restablecida exitosamente.",
-    "goToLogin": "Ir a Login"
+    "goToLogin": "Ir a Login",
+    "emailMissing": "Falta el correo para restablecer la contraseña. Solicita el proceso de nuevo."
   },
   "ownerManage": {
     "promos": {
@@ -405,7 +444,9 @@
         "daysRemaining": "Días restantes",
         "available": "Disponibles"
       },
-      "labels": { "used": "usado" },
+      "labels": {
+        "used": "usado"
+      },
       "actions": {
         "publish": "Publicar Promoción Destacada",
         "creating": "Creando...",
@@ -417,12 +458,16 @@
         "title": "¡Promoción Publicada!",
         "body": "Tu promoción aparecerá destacada en los listados."
       },
-      "confirm": { "delete": "¿Eliminar esta promoción? Esta acción no tiene reversa en el mock." },
+      "confirm": {
+        "delete": "¿Eliminar esta promoción? Esta acción no tiene reversa en el mock."
+      },
       "alerts": {
         "deleted": "Promoción eliminada",
         "deleteFailed": "No se pudo eliminar la promoción"
       },
-      "errors": { "createFailed": "Error al crear promoción" }
+      "errors": {
+        "createFailed": "Error al crear promoción"
+      }
     }
   },
   "payment": {
@@ -470,7 +515,9 @@
   "notifications": {
     "title": "Configuración de notificaciones",
     "intro": "Activa o desactiva las notificaciones según tu preferencia.",
-    "section": { "general": "Preferencias generales" },
+    "section": {
+      "general": "Preferencias generales"
+    },
     "fields": {
       "app": "Notificaciones dentro de la aplicación",
       "promos": "Promociones y descuentos de huariques",

@@ -3,23 +3,24 @@ import { setSession } from './get-session.query.js';
 
 /**
  * Caso de uso: iniciar sesión.
- * Busca al usuario por email en el repositorio y, si existe, persiste la
- * sesión con los datos esenciales (normalizando el rol a "explorer" por defecto).
+ * Autentica contra el backend real (email + contraseña) y persiste
+ * la sesión junto con el JWT recibido.
  *
- * @param {string} email Email del usuario que intenta autenticarse.
- * @returns {Promise<object>} Usuario autenticado.
- * @throws {Error} Si no existe un usuario con ese email.
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<object>} Sesión autenticada (incluye token).
+ * @throws {Error} Si las credenciales son inválidas.
  */
-export async function loginUseCase(email) {
-    const user = await AuthRepository.login(email);
-    if (!user) throw new Error('Usuario no encontrado');
+export async function loginUseCase(email, password) {
+    const authResult = await AuthRepository.login(email, password);
 
-    setSession({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role || 'explorer'
+    const session = setSession({
+        id: authResult.id,
+        email: authResult.email,
+        name: authResult.name,
+        role: (authResult.role || 'consumer').toLowerCase(),
+        token: authResult.token
     });
 
-    return user;
+    return session;
 }

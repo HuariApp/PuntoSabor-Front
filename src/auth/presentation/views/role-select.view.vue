@@ -56,18 +56,25 @@
       </div>
 
       <div class="actions">
-        <button class="btn" :disabled="!role" @click="save">
-          {{ $t('roleSelect.continue') }}
+        <button class="btn" :disabled="!role || saving" @click="save">
+          {{ saving ? $t('roleSelect.saving') : $t('roleSelect.continue') }}
         </button>
+        <p v-if="error" class="error" role="alert">{{ error }}</p>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import { AuthRepository } from '../../infrastructure/auth.repository.js';
+import { getSession, setSession } from '../../application/get-session.query.js';
+
+// El backend usa 'consumer' para el rol de explorador.
+const ROLE_TO_BACKEND = { explorer: 'consumer', owner: 'owner' };
+
 export default {
   name: 'RoleSelectView',
-  data: () => ({ role: null, focusIdx: 0 }),
+  data: () => ({ role: null, focusIdx: 0, saving: false, error: '' }),
   mounted() {
     const persistedRole = localStorage.getItem('ps-role');
     if (persistedRole) this.role = persistedRole;
@@ -85,25 +92,30 @@ export default {
     activateFocused(){
       this.setRole(this.focusIdx === 0 ? 'explorer' : 'owner');
     },
-    save(){
+    async save(){
+      if (this.saving) return;
+      this.saving = true;
+      this.error = '';
       localStorage.setItem('ps-role', this.role);
-      try{
-        const prev = JSON.parse(localStorage.getItem('ps-session') || '{}');
-        const session = { ...prev, role: this.role };
-        localStorage.setItem('ps-session', JSON.stringify(session));
 
+      try {
+        const session = getSession();
+        // Si el usuario ya inició sesión/se registró, persiste el rol en el backend.
+        if (session?.id) {
+          await AuthRepository.updateRole(session.id, ROLE_TO_BACKEND[this.role] || 'consumer');
+        }
 
+        setSession({ role: this.role });
         window.dispatchEvent(new Event('ps-session-updated'));
-      }catch{
-        localStorage.setItem('ps-session', JSON.stringify({ role: this.role }));
-        window.dispatchEvent(new Event('ps-session-updated'));
-      }
 
-      setTimeout(() => {
         this.$router.push(this.role === 'owner'
             ? { name:'owner-huarique-new' }
             : { name:'home' });
-      }, 100);
+      } catch (e) {
+        this.error = e?.message || this.$t('roleSelect.errorDefault');
+      } finally {
+        this.saving = false;
+      }
     }
   }
 };
