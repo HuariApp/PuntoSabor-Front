@@ -34,7 +34,7 @@ export async function processMembershipPaymentUseCase(paymentData, userId) {
             success: false,
             status: 'failed',
             message: `Error en pago: ${error.message}`,
-            errors: error.details || []
+            errors: error.details || [error.message]
         };
     }
 }
@@ -93,8 +93,8 @@ async function processWallet(paymentData, userId) {
 }
 
 /**
- * Ejecuta cobro simulado y crea/actualiza la suscripción (idempotente).
- * Si ya existe una suscripción del usuario la actualiza; si no, crea una nueva.
+ * Ejecuta cobro simulado y crea la suscripción.
+ * El backend cancela la suscripción activa anterior del usuario.
  *
  * @param {object} data Datos combinados del pago y del plan.
  * @returns {Promise<object>} Respuesta uniforme con la suscripción y el recibo.
@@ -121,9 +121,7 @@ async function chargeAndPersist(data) {
         };
     }
 
-    // 2) Crea/actualiza suscripción
-    const [existing] = await MembershipsRepository.getSubscriptionByUser(userId);
-
+    // 2) Crea la suscripción
     const payload = {
         userId,
         planId,
@@ -138,12 +136,8 @@ async function chargeAndPersist(data) {
     // incluir walletId cuando aplique (para trazabilidad)
     if (method === 'wallet' && data.walletId) payload.walletId = data.walletId;
 
-    let saved;
-    if (existing?.id) {
-        saved = await MembershipsRepository.updateSubscription(existing.id, payload);
-    } else {
-        saved = await MembershipsRepository.createSubscription(payload);
-    }
+    // El backend cancela la suscripción activa anterior al hacer POST /subscriptions
+    const saved = await MembershipsRepository.createSubscription(payload);
 
     // 3) Respuesta uniforme
     return {
