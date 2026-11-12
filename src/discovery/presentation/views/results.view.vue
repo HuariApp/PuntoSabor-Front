@@ -5,9 +5,18 @@
       <small style="font-size:14px">{{ results.length }} hallazgos</small>
     </h2>
 
+    <label class="field">
+      <span>Ordenar resultados</span>
+      <select id="results-sort" v-model="sortOrder">
+        <option value="rating-desc">Más valorados</option>
+        <option value="price-asc">Menor precio</option>
+        <option value="price-desc">Mayor precio</option>
+      </select>
+    </label>
+
     <div class="grid cards-4">
       <HuariqueCard
-          v-for="h in results"
+          v-for="h in sortedResults"
           :key="h.id"
           :item="h"
           :img="itemImg(h)"
@@ -72,8 +81,32 @@ export default {
   components: { HuariqueCard },
   data: () => ({
     results: [],
-    promosMap: {}
+    promosMap: {},
+    sortOrder: 'rating-desc'
   }),
+  computed: {
+    sortedResults() {
+      const getNumericValue = value => {
+        const numericValue = Number(value);
+        return Number.isFinite(numericValue) ? numericValue : 0;
+      };
+
+      return this.results
+          .map((item, index) => ({ item, index }))
+          .sort((a, b) => {
+            const aValue = this.sortOrder === 'rating-desc'
+                ? getNumericValue(a.item.rating)
+                : getNumericValue(a.item.price);
+            const bValue = this.sortOrder === 'rating-desc'
+                ? getNumericValue(b.item.rating)
+                : getNumericValue(b.item.price);
+            const direction = this.sortOrder === 'price-asc' ? 1 : -1;
+
+            return (aValue - bValue) * direction || a.index - b.index;
+          })
+          .map(({ item }) => item);
+    }
+  },
   async created() {
     this.fetch();
   },
