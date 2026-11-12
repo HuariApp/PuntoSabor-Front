@@ -1,11 +1,11 @@
 <template>
   <section class="wrap">
     <h2 class="section-title">
-      Resultados
-      <small style="font-size:14px">{{ results.length }} hallazgos</small>
+      {{ $t('results.title') }}
+      <small style="font-size:14px">{{ $t('results.count', { count: results.length }) }}</small>
     </h2>
 
-    <div class="grid cards-4">
+    <div v-if="results.length" class="grid cards-4">
       <HuariqueCard
           v-for="h in results"
           :key="h.id"
@@ -13,6 +13,25 @@
           :img="itemImg(h)"
           :promo="promosMap[h.id] || null"
       />
+    </div>
+
+    <div
+        v-else-if="!loading && hasLoaded"
+        class="empty-state"
+        role="status"
+        aria-live="polite"
+        aria-labelledby="search-empty-title"
+    >
+      <h3 id="search-empty-title">{{ $t('results.emptyTitle') }}</h3>
+      <p>{{ $t('results.emptyMessage') }}</p>
+      <div class="empty-state__actions">
+        <RouterLink class="ps-btn ps-btn--primary" to="/categories">
+          {{ $t('results.categoriesLink') }}
+        </RouterLink>
+        <RouterLink class="ps-btn ps-btn--ghost" to="/map">
+          {{ $t('results.mapLink') }}
+        </RouterLink>
+      </div>
     </div>
   </section>
 </template>
@@ -72,7 +91,9 @@ export default {
   components: { HuariqueCard },
   data: () => ({
     results: [],
-    promosMap: {}
+    promosMap: {},
+    loading: true,
+    hasLoaded: false
   }),
   async created() {
     this.fetch();
@@ -82,28 +103,37 @@ export default {
   },
   methods: {
     async fetch() {
-      this.results = await searchHuariquesQuery(this.$route.query.q || '');
-
-      // Cargar promociones destacadas activas y mapear por huariqueId
+      this.loading = true;
+      this.hasLoaded = false;
+      this.results = [];
+      this.promosMap = {};
       try {
-        const pf = await listFeaturedPromotionsQuery();
-        const map = {};
-        (pf.promotions || []).forEach(p => {
-          if (p && p.huariqueId) {
-            const existing = map[p.huariqueId];
-            // Nos quedamos con la promo que vence antes
-            if (!existing || p.daysRemaining < existing.daysRemaining) {
-              map[p.huariqueId] = p;
+        this.results = await searchHuariquesQuery(this.$route.query.q || '');
+        this.hasLoaded = true;
+
+        // Cargar promociones destacadas activas y mapear por huariqueId
+        try {
+          const pf = await listFeaturedPromotionsQuery();
+          const map = {};
+          (pf.promotions || []).forEach(p => {
+            if (p && p.huariqueId) {
+              const existing = map[p.huariqueId];
+              // Nos quedamos con la promo que vence antes
+              if (!existing || p.daysRemaining < existing.daysRemaining) {
+                map[p.huariqueId] = p;
+              }
             }
-          }
-        });
-        this.promosMap = map;
-      } catch (err) {
-        console.warn(
-            'No se pudieron cargar promociones destacadas:',
-            err.message || err
-        );
-        this.promosMap = {};
+          });
+          this.promosMap = map;
+        } catch (err) {
+          console.warn(
+              'No se pudieron cargar promociones destacadas:',
+              err.message || err
+          );
+          this.promosMap = {};
+        }
+      } finally {
+        this.loading = false;
       }
     },
     slugify(s) {
@@ -240,3 +270,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+</style>

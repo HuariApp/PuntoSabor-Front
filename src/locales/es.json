@@ -29,6 +29,14 @@
     "see": "Ver",
     "exploreInArea": "Explorar {category} en tu zona"
   },
+  "results": {
+    "title": "Resultados de búsqueda",
+    "count": "{count} hallazgos",
+    "emptyTitle": "No encontramos huariques",
+    "emptyMessage": "Prueba con otra búsqueda o explora los huariques por categoría o en el mapa.",
+    "categoriesLink": "Explorar categorías",
+    "mapLink": "Ver mapa"
+  },
   "plans": {
     "title": "Planes de membresía",
     "subtitle": "Elige el plan que mejor se ajuste a tu huarique. Puedes cambiarlo cuando quieras.",
